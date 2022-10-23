@@ -1,0 +1,87 @@
+{% extends "base_layout.html" %}
+{% set matrix_label = data['cipher'].alphabet_matrix_label %}
+{% set alphabet_matrix = data['cipher'].alphabet_matrix %}
+{% set lang = data['cipher'].mode.name %}
+{% set encrypted = data['encrypted'] %}
+
+{% block heading %}
+    <div class="heading-container mb-4">
+        <h1 id="app-name">Encrypter 9000</h1>
+    </div>
+{% endblock heading %}
+
+{% block content %}
+    <div class="alert alert-success text-center" role="alert">
+        YEY! Message succesfully encrypted.
+    </div>
+
+    <div class="alphabet-matrix-container">
+        <label class="form-label">Alphabet Matrix</label>
+        <table id="alphabet-matrix" class="table table-borderless">
+            <tr>
+                <th>#</th>
+                {% for letter in matrix_label %}
+                <th>{{ letter }}</th>
+                {% endfor %}
+            </tr>
+            {% if alphabet_matrix %}
+
+                {% for row in alphabet_matrix %}
+                <tr>
+                    <th>{{ matrix_label[loop.index0] }}</th>
+                    {% for letter in row %}
+                    <td>{{ letter }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+            {% else %}
+            
+                {% for i in range(matrix_label|length) %}
+                <tr>
+                    <th>{{ matrix_label[loop.index0] }}</th>
+                    {% for j in range(matrix_label|length) %}
+                    <td>&ndash;</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+            {% endif %}
+        </table>
+    </div>
+
+   <div class="mb-3">
+        <label for="formFile" class="form-label">Encrypted Message</label>
+        <figure>
+            <blockquote class="blockquote">
+                <p id="output">'{{ encrypted }}'</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                The server, now <span id="copy-output">copy text</span>
+            </figcaption>
+        </figure>
+    </div>
+
+    <input type="hidden" id="matrix-label" name="matrix_label" value="{{ matrix_label }}">
+    {% if matrix_label == 'ADFGX' %}
+        <p style="display: none;" id="lang">{{ lang }}</p>
+    {% endif %}
+
+    <div class="d-grid gap-2 d-md-flex justify-content-start mt-8">
+        <a href="/decrypt" id="decrypt-with-alphabet" class="btn btn-primary">Decrypt with this alphabet</a>
+        <a href="/encrypt" class="btn btn-light">Encrypt sum more</a>
+    </div>
+
+    <script>
+        $('#copy-output').click(() => {
+            let text = $('#output').text().replace(/'/g, "");
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                $('#copy-output').text("copied!");
+            })
+            .catch(err => {
+                $('#copy-output').text("That didn't work.");
+            });
+        });
+    </script>
+{% endblock content %}

@@ -1,0 +1,43 @@
+{
+    "numbers": {
+        "0": "XNULAX",
+        "1": "XJEDENX",
+        "2": "XDFAX",
+        "3": "XTRIX",
+        "4": "XSTYRIX",
+        "5": "XPATX",
+        "6": "XSESTX",
+        "7": "XSEDEMX",
+        "8": "XOSEMX",
+        "9": "XDEFATX"
+    },
+    "special_chars": {
+        " ": "XMEDZERAX",
+        ".": "XBODKAX",
+        "?": "XOTAZNIKX",
+        "!": "XFYKRICNIKX",
+        ":": "XDFOJBODKAX",
+        ",": "XCIARKAX",
+        ";": "XBODKOCIARKAX",
+        "~": "XTILDAX",
+        "#": "XHASHTAGX",
+        "^": "XSTRIESKAX",
+        "_": "XPODCIARKOFNIKX",
+        "=": "XROFNASAX",
+        "+": "XPLUSX",
+        "@": "XZAFINACX",
+        "$": "XDOLARX",
+        "&": "XANDX",
+        "*": "XHFIEZDICKAX",
+        "%": "XPERCENTOX",
+        "-": "XPOMLCKAX",
+        "(": "XLAFAZATFORKAX",
+        ")": "XPRAFAZATFORKAX",
+        "[": "XLAFAHRANATAZATFORKAX",
+        "]": "XPRAFAHRANATAZATFORKAX",
+        "{": "XLAFAZLOZITAZATFORKAX",
+        "}": "XLAFAZLOZITAZATFORKAX",
+        "/": "XLOMITKOX",
+        "\\": "XOPACNELOMITKOX"
+    }
+}

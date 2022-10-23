@@ -1,0 +1,98 @@
+{% extends "base_layout.html" %}
+{% set matrix_label = cipher.alphabet_matrix_label %}
+{% set alphabet_matrix = cipher.alphabet_matrix %}
+{% set lang = cipher.mode.name %}
+
+{% block heading %}
+    <div class="heading-container mb-4">
+        <h1 id="app-name">Decrypter 9000</h1>
+    </div>
+{% endblock heading %}
+
+{% block content %}
+    <div class="mb-4">
+        <div class="unused-letters-container">
+            <label class="form-label">Alphabet characters left:</label>
+            <p id="unused-letters"></p>
+        </div>
+        <div class="alphabet-matrix-container">
+            <table id="alphabet-matrix" class="table table-borderless">
+                <tr>
+                    <th>#</th>
+                    {% for letter in matrix_label %}
+                    <th>{{ letter }}</th>
+                    {% endfor %}
+                </tr>
+                {% if alphabet_matrix %}
+
+                    {% for row in alphabet_matrix %}
+                    <tr>
+                        <th>{{ matrix_label[loop.index0] }}</th>
+                        {% for letter in row %}
+                        <td contenteditable="true">{{ letter }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                {% else %}
+                
+                    {% for i in range(matrix_label|length) %}
+                    <tr>
+                        <th>{{ matrix_label[loop.index0] }}</th>
+                        {% for j in range(matrix_label|length) %}
+                        <td contenteditable="true">&ndash;</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                {% endif %}
+            </table>
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-start mt-8">
+            {% set other_mode = 'ADFGVX' if matrix_label == 'ADFGX' else 'ADFGX' %}
+            <a href="/decrypt?mode={{ other_mode }}" class="btn btn-outline-primary">
+            Change to {{ other_mode }}
+            </a>
+            {# <a href="/" class="btn btn-outline-secondary">Decrypt with this alphabet</a> #}
+        </div>
+        
+    </div>
+    <form action="/decrypt" method="POST" id="form">
+
+        {% if matrix_label == 'ADFGX' %}
+        <div class="mb-3">
+            <label class="form-label">Select language</label>
+            <p>Language: <strong id="lang">{{ lang }}</strong></p>
+            <input type="hidden" name="lang" value="{{ lang }}">
+             <div class="d-grid gap-2 d-md-flex justify-content-start mt-8">
+                {% set other_lang = 'CZ' if lang == 'SK' else 'SK' %}
+                <a href="/decrypt?mode=ADFGX&lang={{ other_lang }}" class="btn btn-outline-primary">Change to {{ other_lang }}</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Input Password</label>
+            <input class="form-control" name="password" type="text" placeholder="Password1 ( ͡° ͜ʖ ͡°).." id="password" required> 
+        </div>
+
+        <div class="mb-3">
+            <label for="message" class="form-label">Input Message</label>
+            <textarea class="form-control" id="message" name="message" rows="3" placeholder="Top Secret Message Here.." required></textarea>
+        </div>
+
+        {% for error in errors %}
+        <div class="alert alert-danger text-center" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+
+        <div class="d-grid gap-2 d-md-flex justify-content-start mt-8">
+            <button class="btn btn-primary" type="submit">Gib message</button>
+            <a href="/encrypt" class="btn btn-light">Uh-Oh I need to encrypt</a>
+        </div>
+
+        <input type="hidden" id="matrix-label" name="matrix_label" value="{{ matrix_label }}">
+
+    </form>
+{% endblock content %}
