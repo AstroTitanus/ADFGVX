@@ -1,4 +1,3 @@
-# from pydoc import plain
 from libraries.enums import Mode, Type
 import libraries.helper as h
 
@@ -19,6 +18,9 @@ class Cipher():
         self.alphabet_matrix_size = 5 if mode == Mode.SK or mode == Mode.CZ else 6
         self.alphabet_matrix_label = "ADFGX" if mode == Mode.SK or mode == Mode.CZ else "ADFGVX"
         self.alphabet_matrix = h.random_alphabet_matrix(self.alphabet_list, self.alphabet_matrix_size)
+        self.encrypted_matrix = None
+        self.clean_password = h.clean_string(self.plain_password, Type.PASSWORD, self.alphabet_list, self.mode)
+        self.sorted_clean_password = sorted(list(self.clean_password))
     
 
     def encrypt(self, plain_input):
@@ -52,7 +54,7 @@ class Cipher():
         if len(coord_string) % len(clean_password) != 0:
             mod = len(coord_string) % len(clean_password)
             spaces_to_add = len(clean_password) - mod
-            coord_string += spaces_to_add * " "
+            coord_string += spaces_to_add * " "        
 
         # Convert coordinates string to encrypted string
         sorted_password_list = sorted(list(clean_password))
@@ -62,6 +64,13 @@ class Cipher():
         for char in sorted_password_list:
             col_index = clean_password_list.index(char)
             encrypted_string += "".join([letter for i, letter in enumerate(coord_string) if i % len(clean_password) == col_index])
+        
+        # Generate encrypted matrix from encrypted string
+        encrypted_cols = [item for item in h.split_to_groups(encrypted_string, int(len(encrypted_string) / len(clean_password)), 'list')]
+        encrypted_matrix = []
+        for i in range(2):
+            encrypted_matrix.append([item[i] for item in encrypted_cols])
+        self.encrypted_matrix = encrypted_matrix
 
         return encrypted_string
     
@@ -86,6 +95,12 @@ class Cipher():
         # Split to columns (password matrix)
         groups_length = int(len(clean_encrypted) / len(clean_password))
         sorted_passw_cols = h.split_to_groups(clean_encrypted, groups_length, "list")
+
+        # Generate encrypted matrix from encrypted string
+        encrypted_matrix = []
+        for i in range(2):
+            encrypted_matrix.append([item[i] for item in sorted_passw_cols])
+        self.encrypted_matrix = encrypted_matrix
 
         # Sort columns into the right order according to password
         passw_cols = [[] for arr in range(len(clean_password))]

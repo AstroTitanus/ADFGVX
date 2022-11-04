@@ -1,6 +1,8 @@
 {% extends "base_layout.html" %}
 {% set matrix_label = data['cipher'].alphabet_matrix_label %}
 {% set alphabet_matrix = data['cipher'].alphabet_matrix %}
+{% set encrypted_matrix = data['cipher'].encrypted_matrix %}
+{% set password = data['cipher'].sorted_clean_password %}
 {% set lang = data['cipher'].mode.name %}
 {% set decrypted = data['decrypted'] %}
 
@@ -50,6 +52,34 @@
         </table>
     </div>
 
+    <div class="alphabet-matrix-container">
+        <label class="form-label">Encrypted Matrix</label>
+        <table id="encrypted-matrix" class="table table-borderless">
+            <tr>
+                {% for letter in password %}
+                <th>{{ letter }}</th>
+                {% endfor %}
+            </tr>
+            {% if encrypted_matrix %}
+
+                {% for row in encrypted_matrix %}
+                <tr>
+                    {% for letter in row %}
+                    <td>{{ letter }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+            {% else %}
+            
+                <div class="alert alert-danger text-center" role="alert">
+                    Aw Snap, encrypted alphabet failed to render.
+                </div>
+
+            {% endif %}
+        </table>
+    </div>
+
    <div class="mb-3">
         <label for="formFile" class="form-label">Decrypted Message</label>
         <figure>
@@ -57,7 +87,7 @@
                 <p>{{ decrypted }}</p>
             </blockquote>
             <figcaption class="blockquote-footer">
-                The server, now
+                You, whenever
             </figcaption>
         </figure>
     </div>
